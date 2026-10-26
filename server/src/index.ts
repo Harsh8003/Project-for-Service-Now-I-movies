@@ -26,7 +26,7 @@ const lockCleanupInterval = setInterval(() => {
   }
 }, 15000);
 
-server.listen(env.PORT, async () => {
+server.listen(env.PORT, '0.0.0.0', async () => {
   console.log(`\n======================================================`);
   console.log(`🎬 CINEMATIC Movie Ticket Platform Server running on port ${env.PORT}`);
   console.log(`📡 REST API: http://localhost:${env.PORT}/api/v1`);
