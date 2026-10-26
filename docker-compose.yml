@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cinematic-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cinematic_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cinematic_secure_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-cinematic_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cinematic_user} -d ${POSTGRES_DB:-cinematic_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: cinematic-backend
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cinematic_user}:${POSTGRES_PASSWORD:-cinematic_secure_pass}@postgres:5432/${POSTGRES_DB:-cinematic_db}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key_change_in_production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-super_secret_refresh_key_change_in_production}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:5173}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_CinematicDemo}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-rzp_secret_CinematicDemo}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-rzp_whsec_CinematicDemo}
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+    ports:
+      - "5000:5000"
+
+volumes:
+  postgres_data:
