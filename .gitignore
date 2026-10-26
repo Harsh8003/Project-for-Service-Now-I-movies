@@ -1,5 +1,6 @@
 # ===== Node =====
 node_modules/
+**/node_modules/
 npm-debug.log*
 yarn-error.log*
 
@@ -7,14 +8,20 @@ yarn-error.log*
 dist/
 client/dist/
 server/dist/
+**/dist/
 
 # ===== Environment Variables =====
 .env
 .env.local
 server/.env
+*.env
+!client/.env.production
+!.env.example
 
 # ===== Prisma =====
 server/prisma/migrations/
+**/query_engine*
+**/*.dll.node
 
 # ===== OS =====
 .DS_Store
@@ -28,4 +35,3 @@ Thumbs.db
 
 # ===== Logs =====
 *.log
-logs/
