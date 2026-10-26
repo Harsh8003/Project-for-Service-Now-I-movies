@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: cinematic-backend
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cinematic-postgres
+          property: connectionString
+      - key: CLIENT_URL
+        value: https://your-vercel-app.vercel.app
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+databases:
+  - name: cinematic-postgres
+    plan: free
+    databaseName: cinematic_db
+    user: cinematic_user

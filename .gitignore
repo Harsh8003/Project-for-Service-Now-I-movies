@@ -1,0 +1,31 @@
+# ===== Node =====
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ===== Build Outputs =====
+dist/
+client/dist/
+server/dist/
+
+# ===== Environment Variables =====
+.env
+.env.local
+server/.env
+
+# ===== Prisma =====
+server/prisma/migrations/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Logs =====
+*.log
+logs/

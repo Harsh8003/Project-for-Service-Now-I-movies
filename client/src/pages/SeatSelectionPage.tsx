@@ -65,8 +65,9 @@ export const SeatSelectionPage: React.FC = () => {
   useEffect(() => {
     if (!showtimeId) return;
 
-    // Connect to WebSocket
-    const socket = io('/', {
+    // Connect to WebSocket — in production, connect to the deployed backend URL
+    const socketUrl = import.meta.env.VITE_API_URL || '/';
+    const socket = io(socketUrl, {
       transports: ['websocket', 'polling']
     });
     socketRef.current = socket;

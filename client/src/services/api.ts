@@ -1,4 +1,8 @@
-const API_BASE = '/api/v1';
+// In production, VITE_API_URL points to the deployed backend (e.g. Railway/Render).
+// In development, Vite's proxy forwards /api → localhost:5000 so we use a relative path.
+const API_BASE = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api/v1`
+  : '/api/v1';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string, public data?: any) {
